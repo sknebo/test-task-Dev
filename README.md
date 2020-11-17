@@ -24,7 +24,7 @@
 
 ### Example
 [Если не зарузилось](https://i.imgur.com/QdtAVFh.gif)
-![](https://i.imgur.com/QdtAVFh.gif)
+[![](https://i.imgur.com/QdtAVFh.gif)](https://i.imgur.com/QdtAVFh.gif)
 
 ### Ответ на тестовое задание
 прикреплять к данному проекту, как собственную ветку

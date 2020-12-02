@@ -14,7 +14,10 @@ class YMap extends React.Component {
         closestPoint: [],
         polyline: [],
         route: null,
+        airDistance: null,
+        carDistance: null,
     }
+    data = []
     myMap
     map
     polygonInst
@@ -24,7 +27,7 @@ class YMap extends React.Component {
             .then((result) => this.setState({ markerAddress: result.geoObjects.get(0).getAddressLine() }))
             .then(() => {
                 store.addNotification({ // this is the handler for generating notifications
-                    title: "Address",
+                    title: "Текущий адрес",
                     message: this.state.markerAddress,
                     type: "info",
                     insert: "top",
@@ -39,14 +42,15 @@ class YMap extends React.Component {
             })
     }
 
-    getClosestPoint() {
+    getClosestPoint() { // function to find the nearest point
         const closestPoint = this.polygonInst.geometry.getClosest(this.state.marker)
         this.setState({ closestPoint: closestPoint.position })
+        this.setState({airDistance: closestPoint.distance})
         this.setState({ polyline: [this.state.marker, closestPoint.position] })
-        console.log(this.map)
+        // console.log(closestPoint)
     }
 
-    addRoute = () => {
+    addRoute = () => { // function to add a route
         if (this.map) {
             this.map
                 .route(this.state.polyline)
@@ -54,8 +58,20 @@ class YMap extends React.Component {
                     if (this.state.route) this.myMap.geoObjects.remove(this.state.route);
                     this.myMap.geoObjects.add(response);
                     this.setState({ route: response })
+                    this.setState({ carDistance: response.getLength() })
                 });
         }
+    }
+
+    setLocalStorage(){ // function to set local storage data
+        let data = {
+            from: this.state.marker, 
+            to: this.state.closestPoint,
+            airDistance: this.state.airDistance,
+            carDistance: this.state.carDistance
+        }
+        this.data.push(data)
+        localStorage.setItem("data", JSON.stringify(this.data))
     }
 
 
@@ -67,7 +83,7 @@ class YMap extends React.Component {
                 <ReactNotification />
                 <Map
                     modules={['geocode', 'route']}
-                    defaultState={{ center: [55.75, 37.57], zoom: 11 }}
+                    defaultState={{ center: [55.75, 37.57], zoom: 10 }}
                     width={"100%"}
                     height={"100vh"}
                     onClick={(event) => {
@@ -75,6 +91,7 @@ class YMap extends React.Component {
                         this.geocode()
                         this.getClosestPoint()
                         this.addRoute()
+                        this.setLocalStorage()
                     }}
                     onLoad={(map) => this.map = map}
                     instanceRef={(ref) => this.myMap = ref}

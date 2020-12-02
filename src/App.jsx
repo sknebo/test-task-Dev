@@ -1,6 +1,7 @@
 import React from 'react';
 import YMap from './Map/Map'
 
+
 class App extends React.Component {
   center={
     lat: 55.755826, 
@@ -11,6 +12,7 @@ class App extends React.Component {
   render() {
     return (
       <div style={{ height: "100%"}}>
+         
         <YMap />
         </div>
     )

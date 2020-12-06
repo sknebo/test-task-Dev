@@ -1,7 +1,9 @@
 <div class="container">
   <ya-map [center]="[55.751952, 37.600739]" [zoom]="9.5" (ready)="onReady($event)">
-    <ya-geoobject [feature]="feature" (ready)="onPolygonReady($event)"></ya-geoobject>
-    <!-- <ya-placemark [geometry]="coords"></ya-placemark> -->
-    <ya-multiroute [referencePoints]="route"></ya-multiroute>
+    <ya-geoobject [feature]="polygonFeature" (ready)="onPolygonReady($event)"></ya-geoobject>
+    <ya-placemark [geometry]="coords"></ya-placemark>
+    <ya-geoobject [feature]="polylineFeature" [options]="polylineOptions" (ready)="onPolylineReady($event)">
+    </ya-geoobject>
+    <ya-multiroute [referencePoints]="routeCoords" [model]="routeModel" [options]="routeOptions"></ya-multiroute>
   </ya-map>
 </div>

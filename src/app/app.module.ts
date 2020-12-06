@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AngularYandexMapsModule, YA_CONFIG } from 'angular8-yandex-maps';
 
 @NgModule({
   declarations: [
@@ -10,9 +10,17 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AngularYandexMapsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: YA_CONFIG,
+      useValue: {
+        apikey: 'f5a2fe0a-b793-40a4-9c0a-ac95af1eab53',
+        lang: 'ru_RU',
+      },
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

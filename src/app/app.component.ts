@@ -9,14 +9,14 @@ import { YaReadyEvent } from 'angular8-yandex-maps';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  
-  public coords: number[] = [];
-  private mkad_km = data_MKAD;
+  public polygon!: YaReadyEvent;
+  public route: any[] = [];
+  private mkad_points = data_MKAD;
   public feature = {
     geometry: {
       type: "Polygon",
       coordinates: [
-        this.mkad_km
+        this.mkad_points
       ],
       fillRule: "nonZero",
     },
@@ -32,16 +32,24 @@ export class AppComponent {
   // }
 
   constructor() {
-    this.mkad_km.forEach(km => {
-      km.push(1);
-      km[2] = km[0];
-      km.splice(0, 1);
+    this.mkad_points.forEach(point => {
+      point.reverse();
     });
   }
 
   public onReady(e: YaReadyEvent<ymaps.Map>) {
     e.target.events.add('click', (e) => {
-      this.coords = <[]>e.get('coords');
+      let coords = <[]>e.get('coords');
+      let closest = this.polygon.target.geometry?.getClosest(coords).position;
+      console.log(closest);
+      
+      this.route = [];
+      this.route.push(closest, coords);
     })
+    
+  }
+
+  public onPolygonReady(e: YaReadyEvent<ymaps.Polygon>) {
+    this.polygon = e;
   }
 }

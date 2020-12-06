@@ -4,6 +4,12 @@
     <ya-placemark [geometry]="coords"></ya-placemark>
     <ya-geoobject [feature]="polylineFeature" [options]="polylineOptions" (ready)="onPolylineReady($event)">
     </ya-geoobject>
-    <ya-multiroute [referencePoints]="routeCoords" [model]="routeModel" [options]="routeOptions"></ya-multiroute>
+    <ya-multiroute [referencePoints]="routeCoords" [model]="routeModel" [options]="routeOptions"
+      (update)="updateRoute($event)"></ya-multiroute>
   </ya-map>
+</div>
+<div *ngIf="showMessage" class="message" (click)="showMessage = false">
+  <p>Длина маршрута: {{routeDistance?.text}}</p>
+  <p>Время в пути: {{routeDuration?.text}}</p>
+  <p>Стартовая точка маршрута: {{pointAddress}}</p>
 </div>

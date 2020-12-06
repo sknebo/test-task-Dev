@@ -1,6 +1,6 @@
-<div class="container" #map>
-  <ya-map #map [center]="[55.751952, 37.600739]" [zoom]="9.5" (ready)="onReady($event)">
+<div class="container">
+  <ya-map [center]="[55.751952, 37.600739]" [zoom]="9.5" (ready)="onReady($event)">
     <ya-geoobject [feature]="feature"></ya-geoobject>
-    <ya-placemark [geometry]="coords" #placemark></ya-placemark>
+    <ya-placemark [geometry]="coords"></ya-placemark>
   </ya-map>
 </div>

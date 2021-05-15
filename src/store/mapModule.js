@@ -120,7 +120,10 @@ export default {
     ymaps: null,
     userCoords: null,
     placeMarksAtPolygon: null,
-    currentRoute: null,
+    currentRoutes: {
+      airPath: null,
+      roadPath: null
+    },
     map: null,
     startPathPoint: null,
   },
@@ -134,8 +137,8 @@ export default {
     SET_PLACEMARKS_AT_POLYGON(state, placeMarks) {
       state.placeMarksAtPolygon = placeMarks;
     },
-    SET_CURRENT_ROUTE(state, route) {
-      state.currentRoute = route;
+    SET_CURRENT_ROUTES(state, routes) {
+      state.currentRoutes = routes;
     },
     SET_MAP(state, map) {
       state.map = map;
@@ -161,23 +164,35 @@ export default {
         const startPoint = new state.ymaps.Placemark(state.userCoords, {
           hintContent: "Вы находитесь здесь",
         });
-        const route = await state.ymaps.route([
+        const roadPath = await state.ymaps.route([
           state.userCoords,
           closestPoint.geometry.getCoordinates(),
         ]);
-        route.getPaths().options.set({
+        roadPath.getPaths().options.set({
           strokeColor: "#1E98FF",
           opacity: 0.9,
           strokeWidth: 5
         });
-        state.map.geoObjects.remove(state.currentRoute?.getPaths());
+        const airPath = new state.ymaps.Polyline(
+          [state.userCoords, closestPoint.geometry.getBounds().shift()],
+          {},
+          {
+            strokeWidth: 3,
+            strokeStyle: "shortdash",
+            strokeColor: "#2e2e2e"
+          }
+        );
+        state.map.geoObjects.remove(state.currentRoutes.roadPath?.getPaths());
+        state.map.geoObjects.remove(state.currentRoutes.airPath);
         state.map.geoObjects.remove(state.startPathPoint);
         commit("SET_START_PATH_POINT", startPoint);
-        commit("SET_CURRENT_ROUTE", route);
+        commit("SET_CURRENT_ROUTES", { airPath, roadPath });
         state.map.geoObjects.add(state.startPathPoint);
-        state.map.geoObjects.add(state.currentRoute.getPaths());
+        state.map.geoObjects.add(state.currentRoutes.airPath);
+        state.map.geoObjects.add(state.currentRoutes.roadPath.getPaths());
       } catch (err) {
-        state.map.geoObjects.remove(state.currentRoute?.getPaths());
+        state.map.geoObjects.remove(state.currentRoutes.roadPath?.getPaths());
+        state.map.geoObjects.remove(state.currentRoutes.airPath);
         state.map.geoObjects.remove(state.startPathPoint);
         console.log(err);
       }

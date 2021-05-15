@@ -19,5 +19,6 @@ Vue.use(YmapPlugin, settings);
 new Vue({
   router,
   store,
-  render: (h) => h(App)
-}).$mount("#app");
+  render: (h) => h(App),
+  el: "#app"
+});

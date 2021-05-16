@@ -1,17 +1,24 @@
 <template>
-  <yandex-map
-    :coords="spawn"
-    :zoom="9"
-    @click="getRoute"
-    @map-was-initialized="initializePolygon"
-  >
-  </yandex-map>
+  <section class="map">
+    <card-dialog></card-dialog>
+    <yandex-map
+      :coords="spawn"
+      :zoom="9"
+      @click="getRoute"
+      @map-was-initialized="initializeMkadPolygon"
+    >
+    </yandex-map>
+  </section>
 </template>
 <script>
+import CardDialog from "@/components/CardDialog.vue";
 import { createNamespacedHelpers } from "vuex";
 
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers("mapModule");
 export default {
+  components: {
+    CardDialog
+  },
   async mounted() {
     await this.loadYmaps();
   },
@@ -19,41 +26,33 @@ export default {
     mkadCoords: (state) => state.MKAD_COORDS,
     spawn: (state) => state.SPAWN,
     ymaps: (state) => state.ymaps,
-    placeMarksAtPolygon: (state) => state.placeMarksAtPolygon,
-    userCoords: (state) => state.userCoords,
     map: (state) => state.map,
   }),
   methods: {
-    ...mapActions(["loadYmaps", "buildRoute"]),
+    ...mapActions([
+      "loadYmaps",
+      "buildRoutes",
+      "setPlacemarksAtPolygon"
+    ]),
     ...mapMutations([
       "SET_USER_COORDS",
-      "SET_PLACEMARKS_AT_POLYGON",
-      "SET_MAP"
+      "SET_MAP",
     ]),
-    getRoute(e) {
+    async getRoute(e) {
       this.SET_USER_COORDS(e.get("coords"));
       this.setPlacemarksAtPolygon();
-      this.buildRoute();
+      this.buildRoutes();
     },
-    setPlacemarksAtPolygon() {
-      const placeMarksAtPolygon = this.ymaps
-        .geoQuery(this.getPlacemarksAtPolygon())
-        .addToMap(this.map)
-        .setOptions("visible", false);
-      this.SET_PLACEMARKS_AT_POLYGON(placeMarksAtPolygon);
-    },
-    initializePolygon(map) {
+    initializeMkadPolygon(map) {
       this.SET_MAP(map);
       const mkad = new this.ymaps.Polygon(this.mkadCoords);
       this.ymaps.geoQuery(mkad).addToMap(this.map);
     },
-    getPlacemarksAtPolygon() {
-      const placeMarks = [];
-      for (let index = 0; index < this.mkadCoords[0].length; index++) {
-        placeMarks.push(new this.ymaps.Placemark(this.mkadCoords[0][index]));
-      }
-      return placeMarks;
-    },
   },
 };
 </script>
+<style lang="scss">
+.map{
+  height: 100%;
+}
+</style>

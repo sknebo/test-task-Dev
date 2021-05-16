@@ -120,12 +120,12 @@ export default {
     ymaps: null,
     userCoords: null,
     placeMarksAtPolygon: null,
-    currentRoutes: {
-      airPath: null,
-      roadPath: null
-    },
+    currentAirRoute: null,
+    currentRoadRoute: null,
+    currentAddress: null,
     map: null,
     startPathPoint: null,
+    distance: 0
   },
   mutations: {
     SET_YMAPS(state, ymaps) {
@@ -137,14 +137,23 @@ export default {
     SET_PLACEMARKS_AT_POLYGON(state, placeMarks) {
       state.placeMarksAtPolygon = placeMarks;
     },
-    SET_CURRENT_ROUTES(state, routes) {
-      state.currentRoutes = routes;
+    SET_CURRENT_AIR_ROUTE(state, route) {
+      state.currentAirRoute = route;
+    },
+    SET_CURRENT_ROAD_ROUTE(state, route) {
+      state.currentRoadRoute = route;
     },
     SET_MAP(state, map) {
       state.map = map;
     },
     SET_START_PATH_POINT(state, point) {
       state.startPathPoint = point;
+    },
+    SET_DISTANCE(state, distance) {
+      state.distance = distance;
+    },
+    SET_CURRENT_ADDRESS(state, address) {
+      state.currentAddress = address;
     }
   },
   actions: {
@@ -158,23 +167,19 @@ export default {
         console.log(error);
       }
     },
-    async buildRoute({ commit, state }) {
+    async buildRoutes({ commit, state, dispatch }) {
       try {
+        state.map.geoObjects.removeAll();
+        state.map.geoObjects.add(new state.ymaps.Polygon(state.MKAD_COORDS));
+        const currentAddress = await state.ymaps.geocode(state.userCoords, { kind: 'locality' });
+        commit("SET_CURRENT_ADDRESS", currentAddress.geoObjects.get(0)?.properties.get("text"));
         const closestPoint = state.placeMarksAtPolygon.getClosestTo(state.userCoords);
         const startPoint = new state.ymaps.Placemark(state.userCoords, {
           hintContent: "Вы находитесь здесь",
         });
-        const roadPath = await state.ymaps.route([
-          state.userCoords,
-          closestPoint.geometry.getCoordinates(),
-        ]);
-        roadPath.getPaths().options.set({
-          strokeColor: "#1E98FF",
-          opacity: 0.9,
-          strokeWidth: 5
-        });
+        commit("SET_START_PATH_POINT", startPoint);
         const airPath = new state.ymaps.Polyline(
-          [state.userCoords, closestPoint.geometry.getBounds().shift()],
+          [state.userCoords, closestPoint.geometry.getCoordinates()],
           {},
           {
             strokeWidth: 3,
@@ -182,20 +187,53 @@ export default {
             strokeColor: "#2e2e2e"
           }
         );
-        state.map.geoObjects.remove(state.currentRoutes.roadPath?.getPaths());
-        state.map.geoObjects.remove(state.currentRoutes.airPath);
-        state.map.geoObjects.remove(state.startPathPoint);
-        commit("SET_START_PATH_POINT", startPoint);
-        commit("SET_CURRENT_ROUTES", { airPath, roadPath });
-        state.map.geoObjects.add(state.startPathPoint);
-        state.map.geoObjects.add(state.currentRoutes.airPath);
-        state.map.geoObjects.add(state.currentRoutes.roadPath.getPaths());
+        commit("SET_CURRENT_AIR_ROUTE", airPath);
+        const roadPath = await state.ymaps.route([
+          state.userCoords,
+          closestPoint.geometry.getCoordinates(),
+        ]);
+        commit("SET_DISTANCE", Math.round(roadPath.getLength() / 1000));
+        roadPath.getPaths().options.set({
+          strokeColor: "#1E98FF",
+          opacity: 0.9,
+          strokeWidth: 5
+        });
+        commit("SET_CURRENT_ROAD_ROUTE", roadPath);
+        localStorage.setItem("lastClick", JSON.stringify({
+          startPoint: state.userCoords,
+          endPoint: closestPoint.geometry.getCoordinates(),
+          distance: state.distance,
+          currentAddress: state.currentAddress
+        }));
+        dispatch("geoObjectsAction", "add");
+        dispatch("showCardDialog", true, { root: true });
       } catch (err) {
-        state.map.geoObjects.remove(state.currentRoutes.roadPath?.getPaths());
-        state.map.geoObjects.remove(state.currentRoutes.airPath);
-        state.map.geoObjects.remove(state.startPathPoint);
         console.log(err);
+        dispatch("geoObjectsAction", "remove");
+        state.map.geoObjects.add(state.currentAirRoute);
+        state.map.geoObjects.add(state.startPathPoint);
       }
     },
+    geoObjectsAction({ state }, actionType) {
+      state.map.geoObjects[actionType](state.currentRoadRoute?.getPaths());
+      state.map.geoObjects[actionType](state.currentAirRoute);
+      state.map.geoObjects[actionType](state.startPathPoint);
+    },
+    setPlacemarksAtPolygon({ commit, state, getters }) {
+      const placeMarksAtPolygon = state.ymaps
+        .geoQuery(getters.getPlacemarksAtPolygon)
+        .addToMap(state.map)
+        .setOptions("visible", false);
+      commit("SET_PLACEMARKS_AT_POLYGON", placeMarksAtPolygon);
+    },
   },
+  getters: {
+    getPlacemarksAtPolygon: (state) => {
+      const placeMarks = [];
+      for (let i = 0; i < state.MKAD_COORDS[0].length; i++) {
+        placeMarks.push(new state.ymaps.Placemark(state.MKAD_COORDS[0][i]));
+      }
+      return placeMarks;
+    }
+  }
 };

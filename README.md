@@ -27,8 +27,8 @@
 - `Router`: Хоть в этом проекте его использование не требуется, но вы **король** своего кода
 
 ### Example
-[Если не зарузилось](https://i.imgur.com/QdtAVFh.gif)
-[![](https://i.imgur.com/QdtAVFh.gif)](https://i.imgur.com/QdtAVFh.gif)
+[Если не зарузилось](readme/u89mfqbYKV.gif)
+[![](readme/u89mfqbYKV.gif)](readme/u89mfqbYKV.gif)
 
 ### Ответ на тестовое задание
 `прикреплять к данному проекту, как собственную ветку или ждём ссылку`

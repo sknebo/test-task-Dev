@@ -1,3 +1,29 @@
+<<<<<<< HEAD
+# sknebo
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
 # Тестовое задание позицию на Junior-developer
 
 **Попробуй выполнить любой из данных кейсов, если не умеешь загружать проекты на git - ждём твою ссылку**
@@ -39,3 +65,4 @@ npm run serve
 
 ### Help
 [Подсказка по выполнению](/readme/Help.md)
+>>>>>>> 6d0f8c26e8f06326b26e7daea9fc8565aad735fc

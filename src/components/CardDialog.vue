@@ -10,7 +10,16 @@
         Текущий адрес: <address class="card__address"> {{ address || "Неопределено" }} </address>
       </div>
       <div>
-        Расстояние до МКАДа: {{ distance }}км
+        Расстояние до МКАДа(по дороге): {{ distanceToMkad }}км
+      </div>
+      <div>
+        Расстояние до МКАДа(по воздуху): {{ airMkad }}км
+      </div>
+      <div>
+        Расстояние до второго полигона(по дороге): {{ distanceToOther }}км
+      </div>
+      <div>
+        Расстояние до второго полигона(по воздуху): {{ airOther }}км
       </div>
     </v-card-text>
     <v-card-actions class="justify-center">
@@ -24,8 +33,11 @@ import { mapState, mapActions } from "vuex";
 export default {
   computed: mapState({
     address: (state) => state.mapModule.currentAddress,
-    distance: (state) => state.mapModule.distance,
-    isShow: (state) => state.showCardDialog
+    distanceToMkad: (state) => state.mapModule.distanceToMkad,
+    isShow: (state) => state.showCardDialog,
+    distanceToOther: (state) => state.mapModule.distanceToOther,
+    airMkad: (state) => state.mapModule.airDistanceToMkad,
+    airOther: (state) => state.mapModule.airDistanceToOther,
   }),
   methods: {
     ...mapActions(["showCardDialog"]),

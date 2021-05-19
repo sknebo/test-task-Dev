@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 const settings = {
   apiKey: "efb7b8ce-e360-4990-a712-d647339d397c",
   lang: "ru_RU",
-  coordorder: "latlong",
+  coordorder: "longlat",
   version: "2.1"
 };
 

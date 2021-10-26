@@ -1,0 +1,75 @@
+html,body{
+  margin: 0;
+}
+@mixin wrapper {
+  margin: 10px 10px;
+  padding: 10px;
+  background-color: rgba(65, 135, 206, 0.94);
+
+  border-radius: 5px;
+}
+
+@mixin item-paddings {
+  margin: 4px 0;
+}
+
+.container {
+  position: relative;
+}
+
+.pointsInfo-wrapper {
+  position: absolute;
+  bottom: 70px;
+  padding: 15px;
+  right: 50px;
+  z-index: 9;
+  font-family: 'open sans', sans-serif;
+  background-color: #fff;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.distance-wrapper {
+  @include wrapper;
+}
+.distance-title {
+  font-weight: bold;
+}
+
+.distance-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  @include item-paddings;
+}
+
+.distance-text {
+  min-width: 200px;
+  width: 70%;
+}
+
+.distance-value {
+  min-width: 50px;
+  width: 30%;
+}
+
+.point-wrapper {
+  @include wrapper;
+}
+
+.point-title {
+  font-weight: bold;
+}
+
+.point-item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  @include item-paddings;
+}
+.address-title{
+  font-weight: bold;
+}
+.address-item{
+  max-width: 300px;
+}

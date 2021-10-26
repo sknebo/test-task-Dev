@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="public/css/app.css" rel="stylesheet">
+    <script src="public/js/app.js" defer></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=51c54478-42ef-4779-a6fd-3310dbb31679&lang=ru_RU"
+            type="text/javascript"></script>
+    <meta charset="UTF-8">
+    <title>Nebo test</title>
+</head>
+<body>
+<div id="app" class="container app" style="width: 100%; height: 100%;">
+    <div  class="pointsInfo-wrapper">
+        <point v-if="show.point_1"  v-bind:point="points.point_1" :key="show.key_1"></point>
+    </div>
+
+
+    <div id="map" style="width: 100vw; height: 100vh">
+
+    </div>
+</div>
+</body>
+</html>

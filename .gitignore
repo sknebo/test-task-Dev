@@ -1,0 +1,19 @@
+#Folders
+var/cache/
+images/
+node_modules/
+products_video/
+.idea/
+
+#Files
+local_conf.php
+access.log
+error.log
+Dockerfile
+docker-compose.yaml
+
+#Extention files
+*.zip
+*.png
+*.jpg
+*.gif

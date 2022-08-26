@@ -5,18 +5,19 @@ import { get_mkad_points } from './mkad_points'
 
 export default function YandexMap() {
     let map = useRef(null)
+    localStorage.getItem('coords') || localStorage.setItem('coords', [55.75, 37.62])
     const [coords, setCoords] = useState({
-        position: localStorage.getItem('coords')?.split(',') || null,
-        address: localStorage.getItem('address') || null
+        position: localStorage.getItem('coords').split(',') || [],
+        address: localStorage.getItem('address') || ''
     })
     const [ymaps_geo, setYmaps_geo] = useState('')
     const [route, setRoute] = useState({
-        length: 0,
-        start: [],
-        end: []
+        lengths: localStorage.getItem('length') || 0,
+        start: localStorage.getItem('coords') || [],
+        end: localStorage.getItem('endpoint') || []
     })
 
-    const [drivingLength, setDrivingLength] = useState('0км')
+    const [drivingLength, setDrivingLength] = useState(0)
 
     const defaultState = {
         center: [55.75, 37.62],
@@ -29,10 +30,14 @@ export default function YandexMap() {
         opacity: 0.3
     }
 
+    function getYmaps(ymaps) {
+        setYmaps_geo(ymaps)
+    }
+
     function getCoords(e) {
         const _coords = e.get('coords')
         localStorage.setItem('coords', _coords)
-        ymaps_geo.geocode(_coords).then((resp) => {
+        ymaps_geo?.geocode(_coords).then((resp) => {
             const getAddress = resp.geoObjects.get(0).getAddressLine()
             localStorage.setItem('address', getAddress)
             setCoords({ position: _coords, address: getAddress })
@@ -162,35 +167,43 @@ export default function YandexMap() {
 
     useEffect(() => {
         console.log(route);
-        if (ymaps_geo) {
-            console.log(map.geoObjects.getLength());
-            ymaps_geo.route(
-                [route.start, route.end],
-                {
-                    mapStateAutoApply: true
-                }
-            ).then((path) => {
-                path.getPaths().options.set({
-                    strokeColor: '000',
-                    opacity: 0.4,
-                })
-                map.geoObjects.splice(3, 1, path);
-                setDrivingLength({
-                    length: path?.properties?._data?.RouterRouteMetaData?.Length?.text,
-                })
-            })
+        console.log(coords);
+        localStorage.setItem('length', route?.lengths)
+        localStorage.setItem('endpoint', route.end)
+
+        if (ymaps_geo && route && coords && map) {
+            try {
+                // console.log(map.geoObjects.getLength());
+                ymaps_geo.route(
+                    [route.start, route.end],
+                    {
+                        mapStateAutoApply: true
+                    }
+                ).then((path) => {
+
+                    path.getPaths().options.set({
+                        strokeColor: '000',
+                        opacity: 0.4,
+                    })
+                    map?.geoObjects?.splice(3, 1, path)
+
+                    setDrivingLength(path?.properties?._data?.RouterRouteMetaData?.Length?.text)
+                    console.log(drivingLength);
+                }).catch((e) => console.log(e))
+            }
+            catch (e) { console.log(e) }
         }
+
     }, [route])
 
 
     useEffect(() => {
-        console.log(drivingLength.length);
+        console.log('yop');
+        console.log(drivingLength?.length);
     }, [drivingLength])
 
 
-    function getYmaps(ymaps) {
-        setYmaps_geo(ymaps)
-    }
+
 
     return (
         <div className='map'>
@@ -203,16 +216,17 @@ export default function YandexMap() {
                     onLoad={(ymaps) => getYmaps(ymaps)}
                     defaultState={defaultState}
                     width='100%' height='100%'
+                    instanceRef={ref => map = ref}
                     onClick={e => getCoords(e)}
-                    instanceRef={ref => map = ref}>
+                >
 
                     {coords ? <Placemark geometry={coords.position} properties={{ hintContent: coords.address }} modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} /> : null}
 
                     <Polygon geometry={[get_mkad_points]} options={polygonOptions} onClick={e => getCoords(e)} />
-                    {route ? <Polyline geometry={[route.start, route.end]} properties={{ hintContent: route.length }} modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} /> : null}
+                    {route ? <Polyline geometry={[route?.start, route?.end]} properties={{ hintContent: route?.length }} modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} /> : null}
                     <ZoomControl />
                 </Map>
-                {drivingLength.length ? <div className='popup'>Длина маршрута из {coords.address} до МКАД на автомобиле: {drivingLength.length}; <br /> по воздуху: {route?.lengths?.toFixed(2)}</div> : null}
+                {drivingLength.length ? <div className='popup'>Длина маршрута из {coords?.address} до МКАД на автомобиле: {drivingLength?.length}; <br /> по воздуху: {route?.lengths?.toFixed(2)}</div> : null}
             </YMaps >
         </div >
     )

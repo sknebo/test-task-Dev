@@ -199,7 +199,7 @@ export default function YandexMap() {
 
     useEffect(() => {
         console.log('yop');
-        console.log(drivingLength?.length);
+        console.log(drivingLength);
     }, [drivingLength])
 
 
@@ -226,7 +226,7 @@ export default function YandexMap() {
                     {route ? <Polyline geometry={[route?.start, route?.end]} properties={{ hintContent: route?.length }} modules={['geoObject.addon.balloon', 'geoObject.addon.hint']} /> : null}
                     <ZoomControl />
                 </Map>
-                {drivingLength.length ? <div className='popup'>Длина маршрута из {coords?.address} до МКАД на автомобиле: {drivingLength?.length}; <br /> по воздуху: {route?.lengths?.toFixed(2)}</div> : null}
+                {drivingLength.length ? <div className='popup'>Длина маршрута из {coords?.address} до МКАД на автомобиле: {drivingLength}; <br /> по воздуху: {route?.lengths?.toFixed(2)}</div> : null}
             </YMaps >
         </div >
     )

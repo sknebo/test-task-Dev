@@ -1,41 +1,70 @@
-# Тестовое задание
+# Getting Started with Create React App
 
-**Попробуй выполнить любой из данных кейсов, если не умеешь загружать проекты на git - ждём твою ссылку**
-отправляй ссылку на решение менеджеру HR, тут они иногда теряются :)
- 
-### Medium 👍 | У новичка могут быть вопросы...
-Вашей основной задачей будет разработка **PWA** приложения на **`Vue.js`** с одной единственной страницей,
-на которой будет карта **`yandex/google`**. А по клику нахождение ближайшего расстояния до МКАД (по воздуху и дороге),
-адрес метки. Выводить информацию как вам угодно (консоль/уведомление и тд...)
-Приложение разрабатывается под внедрение в **`CRM Bitrix24`**, и использования в **`iframe`**, как пояснение - карта
-должна быть **на весь экран**.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### Hardcore 💪 | Ты сильный
-Сделать данное задание с использованием **`VUEX`** / **`Material Design`** / **`Animation`**
-Сделать второй полигон уже непосредственно за МКАД + n(5)., км. Условно ближнее подмосковье.
-Так же и сохранение состояния **VUEX** всех кликов/последнего в **`localStorage`**
+## Available Scripts
 
-### Criteria
-- Чистота кода
-- Обоснованное использование функций, циклов, переборов
-- Оптимизированный код
+In the project directory, you can run:
 
-### Stack
-- `Vue.js (PWA)`: Все наши приложения мы разрабатываем на **`Vue.js`**
-- `EsLint (AirBnb)`: Мы любим чистоту в коде, поэтому используем строгий линтер
-- `VUEX`: Прекрасное хранилище, умение правильного использования его - **мы определённо оценим**
-- `Router`: Хоть в этом проекте его использование не требуется, но вы **король** своего кода
+### `npm start`
 
-### Example
-[Если не зарузилось](readme/u89mfqbYKV.gif)
-[![](readme/u89mfqbYKV.gif)](readme/u89mfqbYKV.gif)
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Ответ на тестовое задание
-`прикреплять к данному проекту, как собственную ветку или ждём ссылку`
-```
-npm install
-npm run serve
-```
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-### Help
-[Подсказка по выполнению](/readme/Help.md)
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
